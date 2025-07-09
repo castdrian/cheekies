@@ -150,3 +150,18 @@ regex = true
 keys = ["papoi", "papoy", "baboy", "baboi", "suminion", "minion"]
 videos = ["SUMINION.mov"]
 regex = true
+
+[[mappings]]
+keys = ["sumin"]
+videos = ["BAESUMIN.mov"]
+regex = true
+
+[[mappings]]
+keys = ["china", "chinese", "communism"]
+videos = ["COMMUNISTJAYUN.mov"]
+regex = true
+
+[[mappings]]
+keys = ["yoonseeunz", "cuddle"]
+videos = ["YOONSEEUNZ.mov"]
+regex = true
