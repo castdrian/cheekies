@@ -4,7 +4,7 @@
   "main": "src/main.ts",
   "module": "main.ts",
   "dependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.2.4",
     "@castdrian/kdapi": "0.5.0",
     "@neato/config": "^4.0.3",
     "@prevter/tiktok-scraper": "^1.0.1",
