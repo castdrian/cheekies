@@ -1,6 +1,6 @@
 {
 	"name": "cheekies",
-	"version": "1.29.0",
+	"version": "1.29.1",
 	"main": "src/main.ts",
 	"module": "main.ts",
 	"dependencies": {
@@ -46,6 +46,9 @@
 	"lint-staged": {
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": "biome check --write"
 	},
-	"trustedDependencies": ["@biomejs/biome", "esbuild"],
+	"trustedDependencies": [
+		"@biomejs/biome",
+		"esbuild"
+	],
 	"type": "module"
 }
