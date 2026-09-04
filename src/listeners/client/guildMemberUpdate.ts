@@ -1,7 +1,10 @@
-import { Listener } from '@sapphire/framework';
-import type { GuildMember } from 'discord.js';
+import { Listener } from "@sapphire/framework";
+import type { GuildMember } from "discord.js";
 
-import { getOrCreateGuildSettings, isJoinRoleEnabled } from '@root/src/database/db';
+import {
+	getOrCreateGuildSettings,
+	isJoinRoleEnabled,
+} from "@root/src/database/db";
 
 export class GuildMemberUpdateListener extends Listener {
 	public async run(oldMember: GuildMember, newMember: GuildMember) {

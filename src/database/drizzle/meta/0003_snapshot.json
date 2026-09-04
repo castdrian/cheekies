@@ -1,137 +1,133 @@
 {
-  "version": "5",
-  "dialect": "sqlite",
-  "id": "cfac8b18-4501-4964-948f-6ab252732cc2",
-  "prevId": "ecb77c98-4e97-4499-a64a-0f2f873e3644",
-  "tables": {
-    "greeting_preferences": {
-      "name": "greeting_preferences",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "greeting_channel_id": {
-          "name": "greeting_channel_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "greeting_message_content": {
-          "name": "greeting_message_content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "greeting_embed_title": {
-          "name": "greeting_embed_title",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "greeting_embed_description": {
-          "name": "greeting_embed_description",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "greeting_preferences_id_guild_preferences_id_fk": {
-          "name": "greeting_preferences_id_guild_preferences_id_fk",
-          "tableFrom": "greeting_preferences",
-          "tableTo": "guild_preferences",
-          "columnsFrom": [
-            "id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "guild_preferences": {
-      "name": "guild_preferences",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "x_auto_embed": {
-          "name": "x_auto_embed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "instagram_auto_embed": {
-          "name": "instagram_auto_embed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "tiktok_auto_embed": {
-          "name": "tiktok_auto_embed",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "greeting_enabled": {
-          "name": "greeting_enabled",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "join_role_enabled": {
-          "name": "join_role_enabled",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": false
-        },
-        "join_role_id": {
-          "name": "join_role_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    }
-  },
-  "enums": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {
-      "\"guild_preferences\".\"twitter_auto_embed\"": "\"guild_preferences\".\"x_auto_embed\""
-    }
-  }
+	"version": "5",
+	"dialect": "sqlite",
+	"id": "cfac8b18-4501-4964-948f-6ab252732cc2",
+	"prevId": "ecb77c98-4e97-4499-a64a-0f2f873e3644",
+	"tables": {
+		"greeting_preferences": {
+			"name": "greeting_preferences",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"greeting_channel_id": {
+					"name": "greeting_channel_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"greeting_message_content": {
+					"name": "greeting_message_content",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"greeting_embed_title": {
+					"name": "greeting_embed_title",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"greeting_embed_description": {
+					"name": "greeting_embed_description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"greeting_preferences_id_guild_preferences_id_fk": {
+					"name": "greeting_preferences_id_guild_preferences_id_fk",
+					"tableFrom": "greeting_preferences",
+					"tableTo": "guild_preferences",
+					"columnsFrom": ["id"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"guild_preferences": {
+			"name": "guild_preferences",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"x_auto_embed": {
+					"name": "x_auto_embed",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": false
+				},
+				"instagram_auto_embed": {
+					"name": "instagram_auto_embed",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": false
+				},
+				"tiktok_auto_embed": {
+					"name": "tiktok_auto_embed",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": false
+				},
+				"greeting_enabled": {
+					"name": "greeting_enabled",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": false
+				},
+				"join_role_enabled": {
+					"name": "join_role_enabled",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false,
+					"default": false
+				},
+				"join_role_id": {
+					"name": "join_role_id",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		}
+	},
+	"enums": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {
+			"\"guild_preferences\".\"twitter_auto_embed\"": "\"guild_preferences\".\"x_auto_embed\""
+		}
+	}
 }

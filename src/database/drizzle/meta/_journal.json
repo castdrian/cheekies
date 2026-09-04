@@ -1,34 +1,34 @@
 {
-  "version": "5",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "5",
-      "when": 1704736810741,
-      "tag": "0000_nosy_hitman",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1705351700968,
-      "tag": "0001_reflective_kingpin",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1705480951811,
-      "tag": "0002_dry_darwin",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1705992876762,
-      "tag": "0003_dapper_shadow_king",
-      "breakpoints": true
-    }
-  ]
+	"version": "5",
+	"dialect": "sqlite",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "5",
+			"when": 1704736810741,
+			"tag": "0000_nosy_hitman",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "5",
+			"when": 1705351700968,
+			"tag": "0001_reflective_kingpin",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "5",
+			"when": 1705480951811,
+			"tag": "0002_dry_darwin",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "5",
+			"when": 1705992876762,
+			"tag": "0003_dapper_shadow_king",
+			"breakpoints": true
+		}
+	]
 }

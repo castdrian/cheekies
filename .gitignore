@@ -134,3 +134,4 @@ dist
 
 # sqlite
 *.db
+.github/husky/_/

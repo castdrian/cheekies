@@ -1,10 +1,10 @@
-import { Database } from 'bun:sqlite';
-import { eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { Database } from "bun:sqlite";
+import { eq } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/bun-sqlite";
 
-import * as schema from '@src/database/schema';
+import * as schema from "@src/database/schema";
 
-const sqlite = new Database('cheekies.db');
+const sqlite = new Database("cheekies.db");
 export const db = drizzle(sqlite, { schema });
 
 export type GuildSettings = typeof schema.guildPreferences.$inferSelect;
@@ -31,12 +31,22 @@ export async function getOrCreateGuildSettings(guildId: string) {
 		joinRoleId: null,
 	};
 
-	const createdSettings = await db.insert(schema.guildPreferences).values(newSettings).returning();
+	const createdSettings = await db
+		.insert(schema.guildPreferences)
+		.values(newSettings)
+		.returning();
 	return createdSettings[0];
 }
 
-export async function updateGuildSettings(guildId: string, newSettings: Partial<GuildSettings>) {
-	await db.update(schema.guildPreferences).set(newSettings).where(eq(schema.guildPreferences.id, guildId)).returning();
+export async function updateGuildSettings(
+	guildId: string,
+	newSettings: Partial<GuildSettings>,
+) {
+	await db
+		.update(schema.guildPreferences)
+		.set(newSettings)
+		.where(eq(schema.guildPreferences.id, guildId))
+		.returning();
 	return getOrCreateGuildSettings(guildId);
 }
 
@@ -74,11 +84,17 @@ export async function getOrCreateGreetingSettings(guildId: string) {
 		greetingEmbedDescription: null,
 	};
 
-	const createdSettings = await db.insert(schema.greetingPreferences).values(newSettings).returning();
+	const createdSettings = await db
+		.insert(schema.greetingPreferences)
+		.values(newSettings)
+		.returning();
 	return createdSettings[0];
 }
 
-export async function updateGreetingSettings(guildId: string, newSettings: Partial<GreetingSettings>) {
+export async function updateGreetingSettings(
+	guildId: string,
+	newSettings: Partial<GreetingSettings>,
+) {
 	await db
 		.update(schema.greetingPreferences)
 		.set(newSettings)
@@ -88,7 +104,9 @@ export async function updateGreetingSettings(guildId: string, newSettings: Parti
 }
 
 export async function removeGreetingSettings(guildId: string) {
-	await db.delete(schema.greetingPreferences).where(eq(schema.greetingPreferences.id, guildId));
+	await db
+		.delete(schema.greetingPreferences)
+		.where(eq(schema.greetingPreferences.id, guildId));
 }
 
 export async function isGreetingEnabled(guildId: string) {

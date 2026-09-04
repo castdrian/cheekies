@@ -1,4 +1,19 @@
 services:
+  db-init:
+    image: alpine:latest
+    container_name: cheekies-db-init
+    volumes:
+      - type: bind
+        source: ./cheekies.db
+        target: /usr/src/app/cheekies.db
+    entrypoint: >
+      sh -c "if [ ! -f /usr/src/app/cheekies.db ]; then
+        apk add --no-cache sqlite &&
+        echo 'Creating SQLite database at /usr/src/app/cheekies.db' &&
+        sqlite3 /usr/src/app/cheekies.db 'VACUUM;';
+      fi &&
+      chown 1000:1000 /usr/src/app/cheekies.db"
+
   cheekies:
     restart: unless-stopped
     build:
@@ -8,12 +23,12 @@ services:
       args:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
     container_name: cheekies
-    environment:
-      - GITHUB_TOKEN
     env_file:
       - .env
     volumes:
-     - type: bind
-       source: ./cheekies.db
-       target: /usr/src/app/cheekies.db
-    command: bun start
+      - type: bind
+        source: ./cheekies.db
+        target: /usr/src/app/cheekies.db
+    depends_on:
+      db-init:
+        condition: service_completed_successfully

@@ -1,5 +1,5 @@
-import { canSendMessages } from '@sapphire/discord.js-utilities';
-import { Command } from '@sapphire/framework';
+import { canSendMessages } from "@sapphire/discord.js-utilities";
+import { Command } from "@sapphire/framework";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -10,39 +10,49 @@ import {
 	ModalSubmitInteraction,
 	TextInputBuilder,
 	TextInputStyle,
-} from 'discord.js';
+} from "discord.js";
 
 export class InfoCommand extends Command {
 	public override async chatInputRun(interaction: CommandInteraction) {
 		try {
 			if (!interaction.isChatInputCommand()) return;
 			if (!interaction.inCachedGuild()) return;
-			
-			const channel = interaction.options.getChannel('channel', true, [
+
+			const channel = interaction.options.getChannel("channel", true, [
 				ChannelType.GuildText,
 				ChannelType.GuildAnnouncement,
 			]);
 
 			if (!canSendMessages(channel))
-				return interaction.reply({ content: 'cheekies cannot send messages to that channel.', ephemeral: true });
+				return interaction.reply({
+					content: "cheekies cannot send messages to that channel.",
+					ephemeral: true,
+				});
 
-			const mentionsDisabled = interaction.options.getBoolean('disable_mentions') ?? false;
-			const file = interaction.options.getAttachment('file')?.url;
+			const mentionsDisabled =
+				interaction.options.getBoolean("disable_mentions") ?? false;
+			const file = interaction.options.getAttachment("file")?.url;
 
 			const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-				new ButtonBuilder().setCustomId('message').setLabel('Add Message').setStyle(ButtonStyle.Primary),
-				new ButtonBuilder().setCustomId('file').setLabel('Send File Only').setStyle(ButtonStyle.Primary),
+				new ButtonBuilder()
+					.setCustomId("message")
+					.setLabel("Add Message")
+					.setStyle(ButtonStyle.Primary),
+				new ButtonBuilder()
+					.setCustomId("file")
+					.setLabel("Send File Only")
+					.setStyle(ButtonStyle.Primary),
 			);
 
 			const modal = new ModalBuilder()
-				.setCustomId('post_message_modal')
+				.setCustomId("post_message_modal")
 				.setTitle(`Send message to ${channel.name}`)
 				.addComponents(
 					new ActionRowBuilder<TextInputBuilder>().addComponents(
 						new TextInputBuilder()
-							.setCustomId('post_message_content')
+							.setCustomId("post_message_content")
 							.setStyle(TextInputStyle.Paragraph)
-							.setLabel('Message Content')
+							.setLabel("Message Content")
 							.setRequired(true)
 							.setMaxLength(2000),
 					),
@@ -56,21 +66,28 @@ export class InfoCommand extends Command {
 					time: 60000,
 				});
 
-				collector.on('collect', async (i) => {
-					if (i.customId === 'message') {
+				collector.on("collect", async (i) => {
+					if (i.customId === "message") {
 						await i.showModal(modal);
 
 						const submit = await i
 							.awaitModalSubmit({
-								filter: (int) => int.customId === 'post_message_modal',
+								filter: (int) => int.customId === "post_message_modal",
 								time: 60000,
 							})
-							.catch(() => interaction.followUp({ content: 'Message modal timed out.', ephemeral: true }));
+							.catch(() =>
+								interaction.followUp({
+									content: "Message modal timed out.",
+									ephemeral: true,
+								}),
+							);
 
 						if (submit instanceof ModalSubmitInteraction) {
 							await submit.deferReply({ ephemeral: true });
 
-							const content = submit.fields.getTextInputValue('post_message_content');
+							const content = submit.fields.getTextInputValue(
+								"post_message_content",
+							);
 
 							await channel.send({
 								content,
@@ -81,7 +98,7 @@ export class InfoCommand extends Command {
 							await i.deleteReply().catch(() => null);
 						}
 					}
-					if (i.customId === 'file') {
+					if (i.customId === "file") {
 						await i.deferUpdate();
 						await channel.send({
 							files: file ? [file] : undefined,
@@ -91,7 +108,7 @@ export class InfoCommand extends Command {
 					}
 				});
 
-				collector.on('end', async () => {
+				collector.on("end", async () => {
 					await interaction.deleteReply().catch(() => null);
 				});
 			} else {
@@ -99,15 +116,22 @@ export class InfoCommand extends Command {
 
 				const submit = await interaction
 					.awaitModalSubmit({
-						filter: (i) => i.customId === 'post_message_modal',
+						filter: (i) => i.customId === "post_message_modal",
 						time: 60000,
 					})
-					.catch(() => interaction.followUp({ content: 'Message modal timed out.', ephemeral: true }));
+					.catch(() =>
+						interaction.followUp({
+							content: "Message modal timed out.",
+							ephemeral: true,
+						}),
+					);
 
 				if (submit instanceof ModalSubmitInteraction) {
 					await submit.deferReply({ ephemeral: true });
 
-					const content = submit.fields.getTextInputValue('post_message_content');
+					const content = submit.fields.getTextInputValue(
+						"post_message_content",
+					);
 					await channel.send({
 						content,
 						allowedMentions: mentionsDisabled ? { parse: [] } : undefined,
@@ -123,24 +147,27 @@ export class InfoCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			builder //
-				.setName('post')
-				.setDescription('send message to channel')
+				.setName("post")
+				.setDescription("send message to channel")
 				.addChannelOption((option) =>
 					option //
-						.setName('channel')
-						.setDescription('channel to send message to')
+						.setName("channel")
+						.setDescription("channel to send message to")
 						.setRequired(true)
-						.addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement),
+						.addChannelTypes(
+							ChannelType.GuildText,
+							ChannelType.GuildAnnouncement,
+						),
 				)
 				.addBooleanOption((option) =>
 					option //
-						.setName('disable_mentions')
-						.setDescription('disable mentions'),
+						.setName("disable_mentions")
+						.setDescription("disable mentions"),
 				)
 				.addAttachmentOption((option) =>
 					option //
-						.setName('file')
-						.setDescription('file to send'),
+						.setName("file")
+						.setDescription("file to send"),
 				)
 				.setDefaultMemberPermissions(0),
 		);

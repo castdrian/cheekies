@@ -1,35 +1,51 @@
 {
-  "name": "cheekies",
-  "version": "1.28.8",
-  "main": "src/main.ts",
-  "module": "main.ts",
-  "dependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@castdrian/kdapi": "0.5.0",
-    "@neato/config": "^4.0.3",
-    "@prevter/tiktok-scraper": "^1.0.1",
-    "@sapphire/decorators": "^6.1.1",
-    "@sapphire/discord.js-utilities": "^7.3.2",
-    "@sapphire/framework": "^5.3.4",
-    "@sapphire/plugin-logger": "^4.0.2",
-    "@the-convocation/twitter-scraper": "^0.16.0",
-    "discord.js": "^14.19.3",
-    "drizzle-kit": "^0.31.1",
-    "drizzle-orm": "^0.43.1",
-    "fast-fuzzy": "^1.12.0",
-    "ko-fuzzy": "^1.0.0",
-    "systeminformation": "^5.25.11",
-    "zod": "^3.24.4"
-  },
-  "peerDependencies": {
-    "typescript": "^5.8.3"
-  },
-  "description": "the all-in-one k-pop discord bot",
-  "scripts": {
-    "format": "bunx @biomejs/biome check --write .",
-    "sql-gen": "drizzle-kit generate --config ./src/database/drizzle-config.ts",
-    "sql-migrate": "drizzle-kit migrate --config ./src/database/drizzle-config.ts",
-    "start": "bun run src/main.ts"
-  },
-  "type": "module"
+	"name": "cheekies",
+	"version": "1.28.8",
+	"main": "src/main.ts",
+	"module": "main.ts",
+	"dependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@castdrian/kdapi": "0.5.0",
+		"@neato/config": "^4.0.3",
+		"@prevter/tiktok-scraper": "^1.0.1",
+		"@sapphire/decorators": "^6.1.1",
+		"@sapphire/discord.js-utilities": "^7.3.2",
+		"@sapphire/framework": "^5.3.4",
+		"@sapphire/plugin-logger": "^4.0.2",
+		"@the-convocation/twitter-scraper": "^0.16.0",
+		"discord.js": "^14.19.3",
+		"drizzle-kit": "^0.31.1",
+		"drizzle-orm": "^0.43.1",
+		"fast-fuzzy": "^1.12.0",
+		"ko-fuzzy": "^1.0.0",
+		"systeminformation": "^5.25.11",
+		"zod": "^3.24.4"
+	},
+	"peerDependencies": {
+		"typescript": "^5.8.3"
+	},
+	"description": "the all-in-one k-pop discord bot",
+	"scripts": {
+		"format": "bunx @biomejs/biome check --write .",
+		"commit": "git-cz --disable-emoji",
+		"cz": "git-cz --disable-emoji",
+		"sql-gen": "drizzle-kit generate --config ./src/database/drizzle-config.ts",
+		"sql-migrate": "drizzle-kit migrate --config ./src/database/drizzle-config.ts",
+		"prepare": "husky .github/husky",
+		"start": "bun run src/main.ts",
+		"test": "bun test",
+		"test:coverage": "bun test --coverage"
+	},
+	"devDependencies": {
+		"bun-types": "^1.3.14",
+		"git-cz": "^4.9.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^17.2.0",
+		"typescript": "^5.8.3"
+	},
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": "biome check --write"
+	},
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
+	"type": "module"
 }

@@ -16,3 +16,10 @@ sudo docker compose up --build
 bun install
 bun start
 ```
+
+### Testing
+
+```bash
+bun test
+bun run test:coverage
+```
