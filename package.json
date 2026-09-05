@@ -22,7 +22,7 @@
 		"zod": "^4.0.0"
 	},
 	"peerDependencies": {
-		"typescript": "^5.8.3"
+		"typescript": "^7.0.2"
 	},
 	"description": "the all-in-one k-pop discord bot",
 	"scripts": {
@@ -41,7 +41,7 @@
 		"git-cz": "^4.9.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^17.2.0",
-		"typescript": "^5.8.3"
+		"typescript": "^7.0.2"
 	},
 	"lint-staged": {
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": "biome check --write"
