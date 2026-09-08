@@ -50,7 +50,7 @@ function createInteraction({
 test("shows an optional message modal and sends selected users and text after the mention", async () => {
 	const { awaitModalSubmit, interaction, showModal, submitReply } =
 		createInteraction({
-			input: "inserted text",
+			input: "inserted text for <@999>",
 			selectedUserIds: ["456", "789"],
 		});
 	const command = Object.create(DeezNutsCommand.prototype) as DeezNutsCommand;
@@ -95,7 +95,7 @@ test("shows an optional message modal and sends selected users and text after th
 		{
 			component: {
 				custom_id: "deez_nuts_text",
-				max_length: 1993,
+				max_length: 1753,
 				required: false,
 				style: TextInputStyle.Paragraph,
 				type: 4,
@@ -126,8 +126,8 @@ test("shows an optional message modal and sends selected users and text after th
 		},
 	]);
 	expect(submitReply).toHaveBeenCalledWith({
-		content: "<@123>\n<@456> <@789> inserted text",
-		allowedMentions: { parse: ["users"] },
+		content: "<@123>\n<@456> <@789> inserted text for <@999>",
+		allowedMentions: { users: ["123", "456", "789", "999"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
 });
@@ -140,7 +140,7 @@ test("sends only the target mention when the modal input is empty", async () => 
 
 	expect(submitReply).toHaveBeenCalledWith({
 		content: "<@123>",
-		allowedMentions: { parse: ["users"] },
+		allowedMentions: { users: ["123"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
 });

@@ -29,6 +29,9 @@ const DEEZ_NUTS_USER_SELECT_ID = "deez_nuts_users";
 const DEEZ_NUTS_ALLOW_MENTIONS_ID = "deez_nuts_allow_mentions";
 const MAX_MESSAGE_LENGTH = 2000;
 const MAX_SELECTED_USERS = 10;
+const MAX_USER_MENTION_LENGTH = 23;
+const MAX_SELECTED_MENTIONS_LENGTH =
+	MAX_SELECTED_USERS * MAX_USER_MENTION_LENGTH + MAX_SELECTED_USERS - 1;
 
 export class DeezNutsCommand extends Command {
 	public override async contextMenuRun(
@@ -56,7 +59,13 @@ export class DeezNutsCommand extends Command {
 								.setStyle(TextInputStyle.Paragraph)
 								.setPlaceholder("Add text after the mention")
 								.setRequired(false)
-								.setMaxLength(MAX_MESSAGE_LENGTH - targetMention.length - 1),
+								.setMaxLength(
+									MAX_MESSAGE_LENGTH -
+										targetMention.length -
+										1 -
+										MAX_SELECTED_MENTIONS_LENGTH -
+										1,
+								),
 						),
 					new LabelBuilder()
 						.setLabel("Also ping")
@@ -108,11 +117,21 @@ export class DeezNutsCommand extends Command {
 			const content = extraLine
 				? `${targetMention}\n${extraLine}`
 				: targetMention;
-			const allowedMentions = submit.fields.getCheckbox(
+			const allowTypedMentions = submit.fields.getCheckbox(
 				DEEZ_NUTS_ALLOW_MENTIONS_ID,
-			)
-				? { parse: ["users"] as const }
-				: { users: [...new Set([targetUserId, ...selectedUserIds])] };
+			);
+			const typedMentionUserIds = allowTypedMentions
+				? [...input.matchAll(/<@!?(\d+)>/g)].map(([, userId]) => userId)
+				: [];
+			const allowedMentions = {
+				users: [
+					...new Set([
+						targetUserId,
+						...selectedUserIds,
+						...typedMentionUserIds,
+					]),
+				],
+			};
 
 			await submit.reply({
 				content,
