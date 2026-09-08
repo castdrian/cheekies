@@ -74,6 +74,7 @@ test("shows a plain-text field and user picker and sends selected users after th
 					max_length?: number;
 					max_values?: number;
 					min_values?: number;
+					placeholder?: string;
 					required?: boolean;
 					style?: number;
 					type: number;
@@ -93,7 +94,7 @@ test("shows a plain-text field and user picker and sends selected users after th
 	expect(modalData.components).toMatchObject([
 		{
 			content:
-				"The target author will be mentioned first. Choose additional people to ping, then add optional plain text.",
+				"The target author will be mentioned first. Choose additional people to mention, then add optional plain text.",
 			type: 10,
 		},
 		{
@@ -101,17 +102,18 @@ test("shows a plain-text field and user picker and sends selected users after th
 				custom_id: "deez_nuts_users",
 				max_values: 10,
 				min_values: 0,
+				placeholder: "Select people to mention",
 				required: false,
 				type: 5,
 			},
 			description:
-				"Optional — selected users will be mentioned below the target.",
-			label: "People to ping",
+				"Optional — selected users will be mentioned after the target.",
+			label: "People to mention",
 		},
 		{
 			component: {
 				custom_id: "deez_nuts_text",
-				max_length: 1402,
+				max_length: 1410,
 				required: false,
 				style: TextInputStyle.Paragraph,
 				type: 4,
@@ -121,7 +123,7 @@ test("shows a plain-text field and user picker and sends selected users after th
 		},
 	]);
 	expect(submitReply).toHaveBeenCalledWith({
-		content: "<@123>\n<@456> <@789> inserted text",
+		content: "<@123><@456><@789>\ninserted text",
 		allowedMentions: { users: ["123", "456", "789"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
@@ -150,7 +152,7 @@ test("keeps typed target and selected user mentions from pinging users", async (
 	await command.contextMenuRun(interaction);
 
 	expect(submitReply).toHaveBeenCalledWith({
-		content: "<@123>\n<@456> typed <\u200b@123> and <\u200b@!456>",
+		content: "<@123><@456>\ntyped <\u200b@123> and <\u200b@!456>",
 		allowedMentions: { users: ["123", "456"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});

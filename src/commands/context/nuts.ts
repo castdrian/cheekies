@@ -32,7 +32,7 @@ const MAX_USER_MENTION_LENGTH = 23;
 const MIN_USER_MENTION_SYNTAX_LENGTH = 4;
 const MENTION_ESCAPE_LENGTH = 1;
 const MAX_SELECTED_MENTIONS_LENGTH =
-	MAX_SELECTED_USERS * MAX_USER_MENTION_LENGTH + MAX_SELECTED_USERS - 1;
+	MAX_SELECTED_USERS * MAX_USER_MENTION_LENGTH;
 
 function escapeUserMentionSyntax(input: string) {
 	return input.replace(/<(@!?)(\d+)>/g, "<\u200b$1$2>");
@@ -42,7 +42,6 @@ function getMaxTextInputLength(targetMention: string) {
 	const availableMessageLength =
 		MAX_MESSAGE_LENGTH -
 		targetMention.length -
-		1 -
 		MAX_SELECTED_MENTIONS_LENGTH -
 		1;
 
@@ -70,19 +69,19 @@ export class DeezNutsCommand extends Command {
 				.setTitle("DEEZ NUTS")
 				.addTextDisplayComponents(
 					new TextDisplayBuilder().setContent(
-						"The target author will be mentioned first. Choose additional people to ping, then add optional plain text.",
+						"The target author will be mentioned first. Choose additional people to mention, then add optional plain text.",
 					),
 				)
 				.addLabelComponents(
 					new LabelBuilder()
-						.setLabel("People to ping")
+						.setLabel("People to mention")
 						.setDescription(
-							"Optional — selected users will be mentioned below the target.",
+							"Optional — selected users will be mentioned after the target.",
 						)
 						.setUserSelectMenuComponent(
 							new UserSelectMenuBuilder()
 								.setCustomId(DEEZ_NUTS_USER_SELECT_ID)
-								.setPlaceholder("Select users to ping")
+								.setPlaceholder("Select people to mention")
 								.setMinValues(0)
 								.setMaxValues(MAX_SELECTED_USERS)
 								.setRequired(false),
@@ -124,13 +123,8 @@ export class DeezNutsCommand extends Command {
 				.filter((userId) => userId !== targetUserId)
 				.map((userId) => `<@${userId}>`);
 			const plainText = escapeUserMentionSyntax(input.trim());
-			const selectedMentionsText = selectedMentions.join(" ");
-			const extraLine = [selectedMentionsText, plainText]
-				.filter((value) => value.length > 0)
-				.join(" ");
-			const content = extraLine
-				? `${targetMention}\n${extraLine}`
-				: targetMention;
+			const mentionLine = targetMention + selectedMentions.join("");
+			const content = plainText ? `${mentionLine}\n${plainText}` : mentionLine;
 			const allowedMentions = {
 				users: [...new Set([targetUserId, ...selectedUserIds])],
 			};
