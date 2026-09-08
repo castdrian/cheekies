@@ -29,8 +29,28 @@ const DEEZ_NUTS_USER_SELECT_ID = "deez_nuts_users";
 const MAX_MESSAGE_LENGTH = 2000;
 const MAX_SELECTED_USERS = 10;
 const MAX_USER_MENTION_LENGTH = 23;
+const MIN_USER_MENTION_SYNTAX_LENGTH = 4;
+const MENTION_ESCAPE_LENGTH = 1;
 const MAX_SELECTED_MENTIONS_LENGTH =
 	MAX_SELECTED_USERS * MAX_USER_MENTION_LENGTH + MAX_SELECTED_USERS - 1;
+
+function escapeUserMentionSyntax(input: string) {
+	return input.replace(/<(@!?)(\d+)>/g, "<\u200b$1$2>");
+}
+
+function getMaxTextInputLength(targetMention: string) {
+	const availableMessageLength =
+		MAX_MESSAGE_LENGTH -
+		targetMention.length -
+		1 -
+		MAX_SELECTED_MENTIONS_LENGTH -
+		1;
+
+	return Math.floor(
+		(availableMessageLength * MIN_USER_MENTION_SYNTAX_LENGTH) /
+			(MIN_USER_MENTION_SYNTAX_LENGTH + MENTION_ESCAPE_LENGTH),
+	);
+}
 
 export class DeezNutsCommand extends Command {
 	public override async contextMenuRun(
@@ -48,10 +68,12 @@ export class DeezNutsCommand extends Command {
 			const modal = new ModalBuilder()
 				.setCustomId(DEEZ_NUTS_MODAL_ID)
 				.setTitle("DEEZ NUTS")
-				.addComponents(
+				.addTextDisplayComponents(
 					new TextDisplayBuilder().setContent(
 						"The target author will be mentioned first. Choose additional people to ping, then add optional plain text.",
 					),
+				)
+				.addLabelComponents(
 					new LabelBuilder()
 						.setLabel("People to ping")
 						.setDescription(
@@ -65,6 +87,8 @@ export class DeezNutsCommand extends Command {
 								.setMaxValues(MAX_SELECTED_USERS)
 								.setRequired(false),
 						),
+				)
+				.addLabelComponents(
 					new LabelBuilder()
 						.setLabel("Message text")
 						.setDescription("Optional — plain text below the target mention.")
@@ -74,13 +98,7 @@ export class DeezNutsCommand extends Command {
 								.setStyle(TextInputStyle.Paragraph)
 								.setPlaceholder("Add a message")
 								.setRequired(false)
-								.setMaxLength(
-									MAX_MESSAGE_LENGTH -
-										targetMention.length -
-										1 -
-										MAX_SELECTED_MENTIONS_LENGTH -
-										1,
-								),
+								.setMaxLength(getMaxTextInputLength(targetMention)),
 						),
 				);
 
@@ -105,7 +123,9 @@ export class DeezNutsCommand extends Command {
 			const selectedMentions = selectedUserIds
 				.filter((userId) => userId !== targetUserId)
 				.map((userId) => `<@${userId}>`);
-			const extraLine = [...selectedMentions, input.trim()]
+			const plainText = escapeUserMentionSyntax(input.trim());
+			const selectedMentionsText = selectedMentions.join(" ");
+			const extraLine = [selectedMentionsText, plainText]
 				.filter((value) => value.length > 0)
 				.join(" ");
 			const content = extraLine

@@ -111,7 +111,7 @@ test("shows a plain-text field and user picker and sends selected users after th
 		{
 			component: {
 				custom_id: "deez_nuts_text",
-				max_length: 1753,
+				max_length: 1402,
 				required: false,
 				style: TextInputStyle.Paragraph,
 				type: 4,
@@ -140,9 +140,9 @@ test("sends only the target mention when the modal input is empty", async () => 
 	});
 });
 
-test("keeps typed user mention syntax from pinging users", async () => {
+test("keeps typed target and selected user mentions from pinging users", async () => {
 	const { interaction, submitReply } = createInteraction({
-		input: "typed <@999>",
+		input: "typed <@123> and <@!456>",
 		selectedUserIds: ["456"],
 	});
 	const command = Object.create(DeezNutsCommand.prototype) as DeezNutsCommand;
@@ -150,8 +150,21 @@ test("keeps typed user mention syntax from pinging users", async () => {
 	await command.contextMenuRun(interaction);
 
 	expect(submitReply).toHaveBeenCalledWith({
-		content: "<@123>\n<@456> typed <@999>",
+		content: "<@123>\n<@456> typed <\u200b@123> and <\u200b@!456>",
 		allowedMentions: { users: ["123", "456"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
+});
+
+test("preserves repeated typed mentions within the message limit", async () => {
+	const input = "<@1>".repeat(350);
+	const { interaction, submitReply } = createInteraction({ input });
+	const command = Object.create(DeezNutsCommand.prototype) as DeezNutsCommand;
+
+	await command.contextMenuRun(interaction);
+
+	const reply = submitReply.mock.calls[0]?.[0] as { content: string };
+
+	expect(reply.content).toHaveLength(1757);
+	expect(reply.content.match(/<\u200b@1>/g)).toHaveLength(350);
 });
