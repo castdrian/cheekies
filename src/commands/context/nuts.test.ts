@@ -10,11 +10,9 @@ import {
 import { DEEZ_NUTS_CLIP_PATH, DeezNutsCommand } from "./nuts";
 
 function createInteraction({
-	allowMentionsToPing = true,
 	input,
 	selectedUserIds = [],
 }: {
-	allowMentionsToPing?: boolean;
 	input: string;
 	selectedUserIds?: string[];
 }) {
@@ -23,7 +21,6 @@ function createInteraction({
 	const submit = {
 		customId: "deez_nuts_modal",
 		fields: {
-			getCheckbox: mock(() => allowMentionsToPing),
 			getSelectedUsers: mock(
 				() => new Collection(selectedUserIds.map((id) => [id, {}])),
 			),
@@ -47,10 +44,10 @@ function createInteraction({
 	return { awaitModalSubmit, interaction, showModal, submitReply };
 }
 
-test("shows an optional message modal and sends selected users and text after the mention", async () => {
+test("shows a plain-text field and user picker and sends selected users after the mention", async () => {
 	const { awaitModalSubmit, interaction, showModal, submitReply } =
 		createInteraction({
-			input: "inserted text for <@999>",
+			input: "inserted text",
 			selectedUserIds: ["456", "789"],
 		});
 	const command = Object.create(DeezNutsCommand.prototype) as DeezNutsCommand;
@@ -72,7 +69,7 @@ test("shows an optional message modal and sends selected users and text after th
 	const modal = showModal.mock.calls[0]?.[0] as {
 		toJSON: () => {
 			components: Array<{
-				component: {
+				component?: {
 					custom_id: string;
 					max_length?: number;
 					max_values?: number;
@@ -82,8 +79,10 @@ test("shows an optional message modal and sends selected users and text after th
 					type: number;
 					default?: boolean;
 				};
+				content?: string;
 				description?: string;
 				label: string;
+				type: number;
 			}>;
 			custom_id: string;
 		};
@@ -93,15 +92,9 @@ test("shows an optional message modal and sends selected users and text after th
 	expect(modalData.custom_id).toBe("deez_nuts_modal");
 	expect(modalData.components).toMatchObject([
 		{
-			component: {
-				custom_id: "deez_nuts_text",
-				max_length: 1753,
-				required: false,
-				style: TextInputStyle.Paragraph,
-				type: 4,
-			},
-			description: "Optional — appears below the target mention.",
-			label: "Extra text",
+			content:
+				"The target author will be mentioned first. Choose additional people to ping, then add optional plain text.",
+			type: 10,
 		},
 		{
 			component: {
@@ -111,23 +104,25 @@ test("shows an optional message modal and sends selected users and text after th
 				required: false,
 				type: 5,
 			},
-			description: "Optional — choose people to mention.",
-			label: "Also ping",
+			description:
+				"Optional — selected users will be mentioned below the target.",
+			label: "People to ping",
 		},
 		{
 			component: {
-				custom_id: "deez_nuts_allow_mentions",
-				default: true,
-				type: 23,
+				custom_id: "deez_nuts_text",
+				max_length: 1753,
+				required: false,
+				style: TextInputStyle.Paragraph,
+				type: 4,
 			},
-			description:
-				"User mentions typed in the extra text will notify those users.",
-			label: "Allow mentions to ping",
+			description: "Optional — plain text below the target mention.",
+			label: "Message text",
 		},
 	]);
 	expect(submitReply).toHaveBeenCalledWith({
-		content: "<@123>\n<@456> <@789> inserted text for <@999>",
-		allowedMentions: { users: ["123", "456", "789", "999"] },
+		content: "<@123>\n<@456> <@789> inserted text",
+		allowedMentions: { users: ["123", "456", "789"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
 });
@@ -145,9 +140,8 @@ test("sends only the target mention when the modal input is empty", async () => 
 	});
 });
 
-test("allows selected users to ping while typed mentions stay disabled", async () => {
+test("keeps typed user mention syntax from pinging users", async () => {
 	const { interaction, submitReply } = createInteraction({
-		allowMentionsToPing: false,
 		input: "typed <@999>",
 		selectedUserIds: ["456"],
 	});

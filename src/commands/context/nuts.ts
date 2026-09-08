@@ -4,11 +4,11 @@ import { Command } from "@sapphire/framework";
 import {
 	ApplicationCommandType,
 	ApplicationIntegrationType,
-	CheckboxBuilder,
 	LabelBuilder,
 	Message,
 	type MessageContextMenuCommandInteraction,
 	ModalBuilder,
+	TextDisplayBuilder,
 	TextInputBuilder,
 	TextInputStyle,
 	UserSelectMenuBuilder,
@@ -26,7 +26,6 @@ export const DEEZ_NUTS_CLIP_PATH = path.join(
 const DEEZ_NUTS_MODAL_ID = "deez_nuts_modal";
 const DEEZ_NUTS_TEXT_INPUT_ID = "deez_nuts_text";
 const DEEZ_NUTS_USER_SELECT_ID = "deez_nuts_users";
-const DEEZ_NUTS_ALLOW_MENTIONS_ID = "deez_nuts_allow_mentions";
 const MAX_MESSAGE_LENGTH = 2000;
 const MAX_SELECTED_USERS = 10;
 const MAX_USER_MENTION_LENGTH = 23;
@@ -50,26 +49,14 @@ export class DeezNutsCommand extends Command {
 				.setCustomId(DEEZ_NUTS_MODAL_ID)
 				.setTitle("DEEZ NUTS")
 				.addComponents(
+					new TextDisplayBuilder().setContent(
+						"The target author will be mentioned first. Choose additional people to ping, then add optional plain text.",
+					),
 					new LabelBuilder()
-						.setLabel("Extra text")
-						.setDescription("Optional — appears below the target mention.")
-						.setTextInputComponent(
-							new TextInputBuilder()
-								.setCustomId(DEEZ_NUTS_TEXT_INPUT_ID)
-								.setStyle(TextInputStyle.Paragraph)
-								.setPlaceholder("Add text after the mention")
-								.setRequired(false)
-								.setMaxLength(
-									MAX_MESSAGE_LENGTH -
-										targetMention.length -
-										1 -
-										MAX_SELECTED_MENTIONS_LENGTH -
-										1,
-								),
-						),
-					new LabelBuilder()
-						.setLabel("Also ping")
-						.setDescription("Optional — choose people to mention.")
+						.setLabel("People to ping")
+						.setDescription(
+							"Optional — selected users will be mentioned below the target.",
+						)
 						.setUserSelectMenuComponent(
 							new UserSelectMenuBuilder()
 								.setCustomId(DEEZ_NUTS_USER_SELECT_ID)
@@ -79,14 +66,21 @@ export class DeezNutsCommand extends Command {
 								.setRequired(false),
 						),
 					new LabelBuilder()
-						.setLabel("Allow mentions to ping")
-						.setDescription(
-							"User mentions typed in the extra text will notify those users.",
-						)
-						.setCheckboxComponent(
-							new CheckboxBuilder()
-								.setCustomId(DEEZ_NUTS_ALLOW_MENTIONS_ID)
-								.setDefault(true),
+						.setLabel("Message text")
+						.setDescription("Optional — plain text below the target mention.")
+						.setTextInputComponent(
+							new TextInputBuilder()
+								.setCustomId(DEEZ_NUTS_TEXT_INPUT_ID)
+								.setStyle(TextInputStyle.Paragraph)
+								.setPlaceholder("Add a message")
+								.setRequired(false)
+								.setMaxLength(
+									MAX_MESSAGE_LENGTH -
+										targetMention.length -
+										1 -
+										MAX_SELECTED_MENTIONS_LENGTH -
+										1,
+								),
 						),
 				);
 
@@ -117,20 +111,8 @@ export class DeezNutsCommand extends Command {
 			const content = extraLine
 				? `${targetMention}\n${extraLine}`
 				: targetMention;
-			const allowTypedMentions = submit.fields.getCheckbox(
-				DEEZ_NUTS_ALLOW_MENTIONS_ID,
-			);
-			const typedMentionUserIds = allowTypedMentions
-				? [...input.matchAll(/<@!?(\d+)>/g)].map(([, userId]) => userId)
-				: [];
 			const allowedMentions = {
-				users: [
-					...new Set([
-						targetUserId,
-						...selectedUserIds,
-						...typedMentionUserIds,
-					]),
-				],
+				users: [...new Set([targetUserId, ...selectedUserIds])],
 			};
 
 			await submit.reply({
