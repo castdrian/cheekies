@@ -10,7 +10,9 @@ test("sends the Yeonhee deez nuts clip without random selection", async () => {
 	const command = Object.create(DeezNutsCommand.prototype) as DeezNutsCommand;
 	const interaction = {
 		isMessageContextMenuCommand: true,
-		targetMessage: { author: { toString: () => "@yeonhee" } },
+		targetMessage: {
+			author: { id: "123", toString: () => "<@123>" },
+		},
 		reply,
 	} as unknown as MessageContextMenuCommandInteraction;
 	const originalRandom = Math.random;
@@ -27,7 +29,8 @@ test("sends the Yeonhee deez nuts clip without random selection", async () => {
 	expect(await Bun.file(DEEZ_NUTS_CLIP_PATH).exists()).toBe(true);
 	expect(random).not.toHaveBeenCalled();
 	expect(reply).toHaveBeenCalledWith({
-		allowedMentions: { repliedUser: true },
+		content: "<@123>",
+		allowedMentions: { users: ["123"] },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
 });

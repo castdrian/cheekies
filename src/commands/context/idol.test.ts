@@ -10,18 +10,21 @@ test("replies to the target message and mentions its author", async () => {
 	const command = Object.create(IdolCommand.prototype) as IdolCommand;
 	const interaction = {
 		isMessageContextMenuCommand: true,
-		targetMessage: {},
+		targetMessage: {
+			author: { id: "123", toString: () => "<@123>" },
+		},
 		reply,
 	} as unknown as MessageContextMenuCommandInteraction;
 
 	await command.contextMenuRun(interaction);
 
 	const replyOptions = reply.mock.calls[0]?.[0] as {
-		allowedMentions: { repliedUser: boolean };
+		allowedMentions: { users: string[] };
+		content: string;
 		files: string[];
 	};
 
-	expect(replyOptions.allowedMentions).toEqual({ repliedUser: true });
+	expect(replyOptions.content).toBe("<@123>");
+	expect(replyOptions.allowedMentions).toEqual({ users: ["123"] });
 	expect(path.basename(replyOptions.files[0])).toBe("IDOL.mp4");
-	expect(replyOptions).not.toHaveProperty("content");
 });

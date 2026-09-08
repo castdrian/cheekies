@@ -29,7 +29,8 @@ export class DeezNutsCommand extends Command {
 				return;
 
 			await interaction.reply({
-				allowedMentions: { repliedUser: true },
+				content: interaction.targetMessage.author.toString(),
+				allowedMentions: { users: [interaction.targetMessage.author.id] },
 				files: [DEEZ_NUTS_CLIP_PATH],
 			});
 		} catch (ex) {
