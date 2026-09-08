@@ -46,9 +46,6 @@
 	"lint-staged": {
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": "biome check --write"
 	},
-	"trustedDependencies": [
-		"@biomejs/biome",
-		"esbuild"
-	],
+	"trustedDependencies": ["@biomejs/biome", "esbuild"],
 	"type": "module"
 }
