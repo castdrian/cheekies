@@ -30,7 +30,7 @@ export class IdolCommand extends Command {
 			);
 
 			await interaction.reply({
-				content: interaction.targetMessage.author.toString(),
+				allowedMentions: { repliedUser: true },
 				files: [filePath],
 			});
 		} catch (ex) {

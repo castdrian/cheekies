@@ -27,7 +27,7 @@ test("sends the Yeonhee deez nuts clip without random selection", async () => {
 	expect(await Bun.file(DEEZ_NUTS_CLIP_PATH).exists()).toBe(true);
 	expect(random).not.toHaveBeenCalled();
 	expect(reply).toHaveBeenCalledWith({
-		content: "@yeonhee",
+		allowedMentions: { repliedUser: true },
 		files: [DEEZ_NUTS_CLIP_PATH],
 	});
 });
