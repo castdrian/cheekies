@@ -18,7 +18,7 @@
 		"drizzle-orm": "^0.45.3",
 		"fast-fuzzy": "^1.12.0",
 		"ko-fuzzy": "^1.0.0",
-		"systeminformation": "^5.33.14",
+		"systeminformation": "^5.33.15",
 		"zod": "^4.6.5"
 	},
 	"peerDependencies": {
