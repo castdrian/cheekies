@@ -15,11 +15,11 @@
 		"@the-convocation/twitter-scraper": "^0.22.3",
 		"discord.js": "^14.27.0",
 		"drizzle-kit": "^0.31.11",
-		"drizzle-orm": "^0.45.3",
+		"drizzle-orm": "^0.45.4",
 		"fast-fuzzy": "^1.12.0",
 		"ko-fuzzy": "^1.0.0",
 		"systeminformation": "^5.33.15",
-		"zod": "^4.6.5"
+		"zod": "^4.6.7"
 	},
 	"peerDependencies": {
 		"typescript": "^5.8.3"
@@ -37,7 +37,7 @@
 		"test:coverage": "bun test --coverage"
 	},
 	"devDependencies": {
-		"bun-types": "^1.4.2",
+		"bun-types": "^1.4.3",
 		"git-cz": "^4.9.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^17.6.0",
