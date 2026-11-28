@@ -18,7 +18,7 @@
 		"drizzle-orm": "^0.45.4",
 		"fast-fuzzy": "^1.12.0",
 		"ko-fuzzy": "^1.0.0",
-		"systeminformation": "^5.33.23",
+		"systeminformation": "^5.33.26",
 		"zod": "^4.6.7"
 	},
 	"peerDependencies": {
@@ -37,10 +37,10 @@
 		"test:coverage": "bun test --coverage"
 	},
 	"devDependencies": {
-		"bun-types": "^1.4.4",
+		"bun-types": "^1.4.5",
 		"git-cz": "^4.9.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^17.6.1",
+		"lint-staged": "^17.6.2",
 		"typescript": "^5.8.3"
 	},
 	"lint-staged": {
